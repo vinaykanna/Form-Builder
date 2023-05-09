@@ -1,0 +1,132 @@
+/*** GLOBAL ***/
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+* {
+  box-sizing: border-box;
+}
+
+/*** FONTS ***/
+@font-face {
+  font-family: muli_regular;
+  src: url(../assets/fonts/Muli.ttf);
+}
+@font-face {
+  font-family: muli_medium;
+  src: url(../assets/fonts/Muli-SemiBold.ttf);
+}
+@font-face {
+  font-family: muli_bold;
+  src: url(../assets/fonts/Muli-Bold.ttf);
+}
+
+/*** CUSTOM  SCROLLBAR ***/
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: lightgrey;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: lightgrey;
+}
+.filter_container::-webkit-scrollbar {
+  width: 4px;
+  background: lightgrey;
+}
+.filter_container::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 10px;
+}
+
+/*** OVERRIDES ***/
+input::placeholder {
+  font-family: muli_regular !important;
+}
+.css-md26zr-MuiInputBase-root-MuiOutlinedInput-root {
+  font-family: muli_regular !important;
+}
+.ql-editor {
+  min-height: 150px;
+  font-family: muli_regular !important;
+}
+.SnackbarItem-message {
+  font-family: muli_regular !important;
+}
+.fc-toolbar-title {
+  color: #182f53;
+  font-size: 25px !important;
+}
+.fc-button-group button {
+  text-transform: capitalize !important;
+}
+.fc-today-button {
+  text-transform: capitalize !important;
+}
+a.fc-event {
+  cursor: pointer !important;
+}
+.fc-popover {
+  z-index: 1 !important;
+}
+#freshworks-container iframe {
+  right: 147px !important;
+  bottom: -5px !important;
+  z-index: 100 !important;
+}
+
+/*** MENTIONS ***/
+.mentions_input {
+  font-family: muli_regular !important;
+}
+.mentions_input__highlighter {
+  height: auto;
+  min-height: 60px;
+  padding: 10px;
+  padding-right: 50px;
+  transition: height 0.3s;
+}
+.focused_mentions_input .mentions_input__highlighter {
+  min-height: 160px;
+}
+.mentions_input textarea {
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  border-radius: 5px !important;
+  padding: 10px;
+  padding-right: 50px;
+}
+.mentions_input__suggestions {
+  border-radius: 5px !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  background: #fafafa;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(20px);
+}
+.mentions_input__suggestions__item {
+  padding: 5px;
+  font-size: 14px;
+}
+.mentions_input__suggestions__item--focused {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.Toastify__toast {
+  font-family: muli_medium !important;
+}
+.Toastify__toast-container {
+  min-width: 350px;
+  max-width: 700px;
+  width: auto;
+}
+.Toastify__toast-body {
+  font-size: 14px !important;
+}
+.fc-header-toolbar {
+  margin-bottom: 0.5rem !important;
+}
