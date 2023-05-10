@@ -12,6 +12,7 @@ import MyForms from "./pages/forms";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./styles/theme";
 import AccessForm from "./pages/access-form";
+import FormResponses from "./pages/form-responses";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +37,10 @@ function App() {
                     element={<FormBuilder />}
                   />
                   <Route path="/access-form/:formId" element={<AccessForm />} />
+                  <Route
+                    path="/form-responses/:formId"
+                    element={<FormResponses />}
+                  />
                 </Routes>
               </Router>
             </MenuPopoverProvider>

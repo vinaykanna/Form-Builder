@@ -41,7 +41,7 @@ const MyForms = () => {
         )}
         <Grid item container spacing={2} mt={2}>
           {filteredData?.map((form: any, index: number) => (
-            <Grid item sm={4} key={index}>
+            <Grid item sm={6} key={index}>
               <FormCard data={form} key={form.id} />
             </Grid>
           ))}

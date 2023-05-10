@@ -20,14 +20,6 @@ const getForms = ({ queryKey }: any) => {
   return http.get("/forms", { params: { ...queryKey[1] } });
 };
 
-const getDefaultForms = () => {
-  return http.get("/forms/default");
-};
-
-const importForms = (data: any) => {
-  return http.post("/forms/import", data);
-};
-
 const getForm = ({ queryKey }: any) => {
   return http.get(`/forms/${queryKey[1]}`);
 };
@@ -60,36 +52,12 @@ const updateField = ({ formId, pageId, fieldId, data }: any) => {
   return http.patch(`/forms/${formId}/pages/${pageId}/fields/${fieldId}`, data);
 };
 
-const getFormValidations = () => {
-  return http.get("/form-validations");
+const submitResponse = ({ formId, data }: any) => {
+  return http.post(`/forms/${formId}/submit-response`, data);
 };
 
-const getDefaultFormValidations = () => {
-  return http.get("/form-validations/default");
-};
-
-const importFormValidations = (data: any) => {
-  return http.post("/form-validations/import", data);
-};
-
-const createFormValidation = ({ data }) => {
-  return http.post("/form-validations", data);
-};
-
-const updateFormValidation = ({ id, data }) => {
-  return http.put(`/form-validations/${id}`, data);
-};
-
-const deleteFormValidation = ({ id }) => {
-  return http.delete(`/form-validations/${id}`);
-};
-
-const getFormActivity = ({ queryKey }: any) => {
-  return http.get(`/forms/${queryKey[1]}/activity`);
-};
-
-const signField = ({ formId, fieldId, data }: any) => {
-  return http.post(`/forms/${formId}/fields/${fieldId}/esign`, data);
+const getFormRespones = ({ queryKey }: any) => {
+  return http.get(`/forms/${queryKey[1]}/responses`);
 };
 
 export {
@@ -103,17 +71,9 @@ export {
   deleteField,
   addField,
   updateField,
-  getFormValidations,
-  createFormValidation,
-  deleteFormValidation,
-  updateFormValidation,
   cloneForm,
   deletePage,
-  getFormActivity,
-  signField,
   duplicatePage,
-  getDefaultForms,
-  importForms,
-  getDefaultFormValidations,
-  importFormValidations,
+  submitResponse,
+  getFormRespones,
 };

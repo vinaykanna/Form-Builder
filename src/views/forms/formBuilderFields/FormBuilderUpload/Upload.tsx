@@ -97,9 +97,16 @@ function Upload(props: UploadProps) {
       const result: any = [];
       for (let i = 0; i < files.length; i++) {
         const file: File = files[i];
+
         const formData = new FormData();
         formData.append("file", file);
-        const res: any = await http.post("/common/upload", formData);
+
+        const res: any = await http.post("/forms/upload-file", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
         result.push({
           name: file.name,
           size: file.size,

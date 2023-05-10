@@ -73,6 +73,14 @@ const getInput = (input: any, field: any) => {
   if (isTitle || isCountry) {
     return (
       <Grid item xs={6}>
+        <Typography
+          sx={{ display: "block", mt: "3px" }}
+          variant="caption"
+          color="rgba(0,0,0,0.6)"
+        >
+          {input.label}{" "}
+          {input?.required && <span style={{ color: "red" }}>*</span>}
+        </Typography>
         <TextField
           variant="outlined"
           fullWidth
@@ -107,20 +115,20 @@ const getInput = (input: any, field: any) => {
             </MenuItem>
           ))}
         </TextField>
-        <Typography
-          sx={{ display: "block", mt: "3px" }}
-          variant="caption"
-          color="rgba(0,0,0,0.6)"
-        >
-          {input.label}{" "}
-          {input?.required && <span style={{ color: "red" }}>*</span>}
-        </Typography>
       </Grid>
     );
   } else {
     if (!input.hide) {
       return (
         <Grid item xs={6}>
+          <Typography
+            sx={{ display: "block", mt: "3px" }}
+            variant="caption"
+            color="rgba(0,0,0,0.6)"
+          >
+            {input.label}{" "}
+            {input?.required && <span style={{ color: "red" }}>*</span>}
+          </Typography>
           <TextField
             variant="outlined"
             fullWidth
@@ -139,14 +147,6 @@ const getInput = (input: any, field: any) => {
             }}
             placeholder={input.placeholder || ""}
           />
-          <Typography
-            sx={{ display: "block", mt: "3px" }}
-            variant="caption"
-            color="rgba(0,0,0,0.6)"
-          >
-            {input.label}{" "}
-            {input?.required && <span style={{ color: "red" }}>*</span>}
-          </Typography>
         </Grid>
       );
     } else {

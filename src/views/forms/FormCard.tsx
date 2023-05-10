@@ -61,6 +61,10 @@ const FormCard = ({ data }: any) => {
           },
         },
         {
+          label: "View Responses",
+          action: () => navigate(`/form-responses/${data._id}`),
+        },
+        {
           label: "Duplicate",
           action: () => {
             handleCloneForm({
@@ -88,7 +92,7 @@ const FormCard = ({ data }: any) => {
 
   return (
     <>
-      <StyledCard sx={{ minHeight: 130 }}>
+      <StyledCard sx={{ height: "100%" }}>
         <StyledMoreIcon onClick={handleMenu}>
           <MoreVertIcon />
         </StyledMoreIcon>

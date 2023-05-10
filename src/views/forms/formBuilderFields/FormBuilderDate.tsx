@@ -1,4 +1,3 @@
-import { DesktopDatePicker } from "@mui/lab";
 import { TextField, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
 import { getFieldSize } from "../../../utils/getFieldSize";
@@ -30,23 +29,14 @@ function FormBuilderDate(props: Props) {
         control={control}
         render={({ field, fieldState: { error } }) => (
           <>
-            <DesktopDatePicker
-              mask="____/__/__"
-              inputFormat="yyyy/MM/dd"
-              value={field.value || null}
-              onChange={field.onChange}
-              renderInput={(params) => (
-                <TextField
-                  fullWidth
-                  size="small"
-                  sx={{
-                    width: getFieldSize(fieldSize),
-                  }}
-                  {...params}
-                  error={Boolean(error)}
-                  onBlur={field.onBlur}
-                />
-              )}
+            <TextField
+              error={Boolean(error)}
+              variant="outlined"
+              fullWidth
+              sx={{ width: getFieldSize(fieldSize) }}
+              {...field}
+              type="date"
+              size="small"
             />
             {error && (
               <Typography

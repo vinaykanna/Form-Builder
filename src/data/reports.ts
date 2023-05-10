@@ -1,4 +1,4 @@
-import { icons } from "assets";
+import { icons } from "../assets";
 
 export const reportsList = [
   {

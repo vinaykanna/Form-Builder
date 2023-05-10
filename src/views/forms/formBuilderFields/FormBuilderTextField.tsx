@@ -54,9 +54,7 @@ function FormbuilderTextField(props: Props) {
               variant="outlined"
               placeholder={placeholder}
               fullWidth
-              sx={{
-                width: getFieldSize(fieldSize),
-              }}
+              sx={{ width: getFieldSize(fieldSize) }}
               multiline={multiline}
               minRows={multiline ? 3 : 1}
               size={size}

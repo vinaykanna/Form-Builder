@@ -6,10 +6,9 @@ import { useForm } from "react-hook-form";
 import { generateDefaultValues } from "./utils/generateDefaultValues";
 import { dynamicSchema } from "./utils/generateSchema";
 import RenderField from "./utils/RenderField";
+import { GreyButton } from "./styles";
 
-function AccessFormFields({ data, active, onContinue }: any) {
-  console.log("data", data);
-
+function AccessFormFields({ data, active, onContinue, setActive }: any) {
   const { control, formState, handleSubmit, reset } = useForm({
     mode: "onChange",
     resolver: yupResolver(dynamicSchema(data)),
@@ -25,10 +24,13 @@ function AccessFormFields({ data, active, onContinue }: any) {
 
   useEffect(() => {
     const { errors } = formState;
+
     if (_.isEmpty(errors)) return;
+
     const firstError = Object.keys(errors)[0];
     const element = document.getElementById(firstError);
     const scrollTo = element!?.offsetTop - 200;
+
     window.scrollTo({
       top: scrollTo,
       behavior: "smooth",
@@ -44,10 +46,20 @@ function AccessFormFields({ data, active, onContinue }: any) {
           </Box>
         ))}
       </Box>
-      <Box mt={8} textAlign="center">
+      <Box mt={8} display="flex" gap={2} justifyContent="center">
+        {active > 0 && (
+          <GreyButton
+            variant="contained"
+            sx={{ minWidth: 200 }}
+            color="secondary"
+            onClick={() => setActive(active - 1)}
+          >
+            Back
+          </GreyButton>
+        )}
         <Button
           variant="contained"
-          sx={{ minWidth: 300 }}
+          sx={{ minWidth: 200 }}
           color="secondary"
           onClick={handleSubmit(onSubmit)}
         >

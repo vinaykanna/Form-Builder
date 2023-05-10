@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { createForm } from "../../api/services/forms";
 import DrawerWrapper from "../../components/DrawerWrapper";
-import FormFreeSoloAutoComplete from "../../components/FormFields/FormFreeSoloAutoComplete";
 import FormInput from "../../components/FormFields/FormInput";
 import { snack } from "../../components/toast";
 import {
@@ -48,16 +47,6 @@ function AddForm({ open, setOpen }: DialogProps) {
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <Box>
           <FormInput control={control} name="name" label="Form Name" />
-        </Box>
-        <Box mt={2}>
-          <FormFreeSoloAutoComplete
-            control={control}
-            label="Tags"
-            name="tags"
-            options={["Tag1", "Tag2"]}
-            multiple
-            freeSolo
-          />
         </Box>
         <Box mt={2}>
           <FormInput

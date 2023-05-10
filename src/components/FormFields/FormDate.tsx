@@ -1,4 +1,3 @@
-import { DesktopDatePicker } from "@mui/lab";
 import { TextField, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
 
@@ -20,24 +19,22 @@ function FormDate(props: Props) {
         control={control}
         render={({ field, fieldState: { error } }) => (
           <>
-            <DesktopDatePicker
+            <TextField
+              error={Boolean(error)}
+              variant="outlined"
               label={`${label} ${required ? "*" : ""}`}
-              inputFormat="dd-MM-yyyy"
-              mask="__-__-____"
-              value={field.value}
-              onChange={field.onChange}
-              renderInput={(params) => (
-                <TextField
-                  fullWidth
-                  size={size}
-                  {...params}
-                  error={Boolean(error)}
-                  onBlur={field.onBlur}
-                />
-              )}
+              fullWidth
+              size={size}
+              {...field}
+              type="date"
+              InputLabelProps={{ shrink: true }}
             />
             {error && (
-              <Typography variant="caption" sx={{ pl: "2px" }} color="rgb(211, 47, 47)">
+              <Typography
+                variant="caption"
+                sx={{ pl: "2px" }}
+                color="rgb(211, 47, 47)"
+              >
                 {error.message}
               </Typography>
             )}

@@ -1,13 +1,12 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
-import { cloneDeep } from "lodash";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
-import { getForm, updatePage } from "../api/services/forms";
+import { useMutation, useQuery } from "react-query";
+import { useParams, useSearchParams } from "react-router-dom";
+import { getForm, submitResponse } from "../api/services/forms";
 import Loader from "../components/Loader";
 import { snack } from "../components/toast";
 import { ResType } from "../types";
@@ -19,11 +18,11 @@ import {
 import { FormBuilderFieldTypes } from "../views/forms/utils/renderFieldsComponent";
 
 function AccessForm() {
-  const queryClient = useQueryClient();
   const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState<any>(null);
   const [active, setActive] = useState(0);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<any>([]);
 
   const { isLoading }: ResType = useQuery(
     ["form-details", params.formId],
@@ -40,72 +39,78 @@ function AccessForm() {
     }
   );
 
-  const { mutate: updatePageFields } = useMutation(updatePage, {
+  const { mutate: submitForm } = useMutation(submitResponse, {
     onSuccess: () => {
-      snack.success("Values saved");
-      queryClient.invalidateQueries("form-details");
-      if (active === data?.pages?.length - 1) {
-        return;
-      }
-      setActive(active + 1);
+      setSearchParams({ submitted: "true" });
     },
     onError: (err: any) => {
       snack.error(err.response.data.message);
     },
   });
 
-  const handleSubmit = (pageData: any) => {
-    const finalData = {
-      ...formData,
-      [data?.pages[active]._id]: pageData,
-    };
+  const handleNext = (pageData: any) => {
+    const fields: any = [];
 
-    const activePageData = finalData[data?.pages[active]._id];
-    const activeFields = [...cloneDeep(data?.pages[active].fields)];
+    for (const key in pageData) {
+      const field = data?.pages[active]?.fields.find(
+        (field: any) => field?._id === key
+      );
 
-    for (const key in activePageData) {
-      const value = activePageData[key];
-      const field = activeFields?.find((field: any) => field._id === key);
-      const type = field?.fieldType;
+      const value = pageData[key];
 
-      if (!field) continue;
+      const result: any = {
+        fieldId: field?._id,
+        fieldType: field?.fieldType,
+        fieldLabel: field?.label,
+        value: null,
+      };
 
-      const hasInputs =
-        type === FormBuilderFieldTypes.NAME ||
-        type === FormBuilderFieldTypes.ADDRESS;
+      const isName = field?.fieldType === FormBuilderFieldTypes.NAME;
+      const isAddress = field?.fieldType === FormBuilderFieldTypes.ADDRESS;
 
-      if (!hasInputs) {
-        field.value = value || null;
+      if (!isName && !isAddress) {
+        fields.push({ ...result, value });
         continue;
       }
 
-      Object.keys(value).forEach((inputKey) => {
+      for (const inputKey in value) {
         const input = field.inputs?.find(
           (input: any) => input._id === inputKey
         );
 
-        if (!input) return;
+        result.value = result.value || [];
+        result.value.push({
+          inputId: input?._id,
+          inputLabel: input?.label,
+          value: value[inputKey],
+        });
+      }
 
-        input.value = value[inputKey] || null;
+      fields.push(result);
+    }
+
+    const prevState = formData;
+    const prevPage = prevState[active];
+
+    if (prevPage) {
+      prevPage.fields = fields;
+    } else {
+      prevState.push({
+        pageId: data?.pages[active]?._id,
+        pageName: data?.pages[active]?.name,
+        fields,
       });
     }
 
-    updatePageFields({
-      formId: params.formId,
-      pageId: data?.pages[active]?._id,
-      data: {
-        fields: activeFields,
-      },
-    });
-  };
+    const isLastPage = active === data?.pages?.length - 1;
 
-  const handleNext = (pageData: any) => {
-    setFormData({
-      ...formData,
-      [data?.pages[active]._id]: pageData,
-    });
+    if (!isLastPage) {
+      setFormData(prevState);
+      setActive((prevActive) => prevActive + 1);
+      return;
+    }
 
-    handleSubmit(pageData);
+    submitForm({ formId: params.formId, data: prevState });
   };
 
   if (isLoading) return <Loader />;
@@ -120,44 +125,60 @@ function AccessForm() {
     >
       <StyledAccessFormAppbar>
         <Typography
-          variant="subtitle2"
+          variant="subtitle1"
           color="primary"
           sx={{ textAlign: "center" }}
         >
           {data?.name}
         </Typography>
       </StyledAccessFormAppbar>
-      <StyledAccessFormContainer>
-        {data?.pages?.length > 1 && (
-          <Stepper
-            sx={{ py: 3, borderBottom: "1px solid #E0E0E0" }}
-            activeStep={active}
-            alternativeLabel
+      {searchParams.get("submitted") === "true" ? (
+        <Box sx={{ textAlign: "center", mt: 10 }}>
+          <Typography variant="h5" color="primary">
+            Thank you for submitting the form
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{ mt: 3 }}
+            onClick={() => {
+              setSearchParams({ submitted: "false" });
+              setFormData([]);
+              setActive(0);
+            }}
           >
-            {data?.pages?.map((item: any, index: number) => (
-              <Step key={item?._id}>
-                <StepLabel
-                  sx={{ cursor: "pointer" }}
-                  onClick={() => setActive(index)}
-                >
-                  {item?.name}
-                </StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        )}
-        {data?.pages?.map((item: any, index: number) => {
-          if (active !== index) return null;
-          return (
-            <AccessFormFields
-              key={item?._id}
-              data={item?.fields}
-              active={active}
-              onContinue={handleNext}
-            />
-          );
-        })}
-      </StyledAccessFormContainer>
+            Submit another response
+          </Button>
+        </Box>
+      ) : (
+        <StyledAccessFormContainer>
+          {data?.pages?.length > 1 && (
+            <Stepper
+              sx={{ py: 3, borderBottom: "1px solid #E0E0E0" }}
+              activeStep={active}
+              alternativeLabel
+            >
+              {data?.pages?.map((item: any) => (
+                <Step key={item?._id}>
+                  <StepLabel sx={{ cursor: "pointer" }}>{item?.name}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          )}
+          {data?.pages?.map((item: any, index: number) => {
+            if (active !== index) return null;
+            return (
+              <AccessFormFields
+                key={item?._id}
+                data={item?.fields}
+                active={active}
+                setActive={setActive}
+                onContinue={handleNext}
+              />
+            );
+          })}
+        </StyledAccessFormContainer>
+      )}
     </Box>
   );
 }
